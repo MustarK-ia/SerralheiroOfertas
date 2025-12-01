@@ -1,10 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
 import { SearchResult, Source } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const searchDeals = async (query: string): Promise<SearchResult> => {
   try {
+    // Initialize the client inside the function to avoid initialization errors 
+    // if process.env is not fully ready at module load time.
+    const apiKey = process.env.API_KEY;
+    
+    if (!apiKey) {
+      console.error("API_KEY is missing. Please check your Vercel Environment Variables.");
+    }
+
+    const ai = new GoogleGenAI({ apiKey: apiKey || '' });
+
     const prompt = `
       Você é um assistente especializado em compras para serralheiros profissionais.
       O usuário está procurando: "${query}".

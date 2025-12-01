@@ -25,6 +25,10 @@
         background: #475569; 
       }
     </style>
+    <script>
+      // Polyfill for process.env to prevent "process is not defined" error on Vercel/Browser
+      window.process = window.process || { env: {} };
+    </script>
   <script type="importmap">
 {
   "imports": {

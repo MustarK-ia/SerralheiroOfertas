@@ -22,7 +22,7 @@ const App: React.FC = () => {
       setLoadingState(LoadingState.SUCCESS);
     } catch (error) {
       console.error(error);
-      setErrorMsg("Ocorreu um erro ao buscar ofertas. Por favor, tente novamente.");
+      setErrorMsg("Ocorreu um erro ao buscar ofertas. Verifique a conexão ou a Chave de API e tente novamente.");
       setLoadingState(LoadingState.ERROR);
     }
   };
