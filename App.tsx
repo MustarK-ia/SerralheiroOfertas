@@ -9,20 +9,19 @@ import { searchDeals } from './services/geminiService';
 const App: React.FC = () => {
   const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.IDLE);
   const [result, setResult] = useState<SearchResult | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSearch = async (query: string) => {
     setLoadingState(LoadingState.LOADING);
     setResult(null);
-    setErrorMsg(null);
 
     try {
+      // O serviço agora trata erros internamente e retorna um fallback se necessário
       const data = await searchDeals(query);
       setResult(data);
       setLoadingState(LoadingState.SUCCESS);
     } catch (error) {
+      // Este bloco raramente será alcançado devido ao tratamento no service
       console.error(error);
-      setErrorMsg("Ocorreu um erro ao buscar ofertas. Verifique a conexão ou a Chave de API e tente novamente.");
       setLoadingState(LoadingState.ERROR);
     }
   };
@@ -59,18 +58,13 @@ const App: React.FC = () => {
         )}
 
         {loadingState === LoadingState.ERROR && (
-           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 text-center">
-             <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-400">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                </svg>
-             </div>
-             <p className="text-red-200 font-medium">{errorMsg}</p>
+           <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 text-center">
+             <p className="text-slate-300">Não foi possível completar a busca. Tente novamente.</p>
              <button 
                 onClick={() => setLoadingState(LoadingState.IDLE)}
-                className="mt-4 text-sm text-red-300 hover:text-white underline underline-offset-2"
+                className="mt-4 text-sm text-amber-500 hover:text-amber-400"
              >
-                Tentar novamente
+                Voltar
              </button>
            </div>
         )}
@@ -81,7 +75,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="text-center py-6 text-slate-500 text-sm border-t border-slate-800 mt-auto">
-        <p>© {new Date().getFullYear()} SerralheiroOfertas AI. Resultados baseados em pesquisa Google.</p>
+        <p>© {new Date().getFullYear()} SerralheiroOfertas AI. Resultados baseados em pesquisa.</p>
       </footer>
     </div>
   );

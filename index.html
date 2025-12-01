@@ -26,8 +26,11 @@
       }
     </style>
     <script>
-      // Polyfill for process.env to prevent "process is not defined" error on Vercel/Browser
-      window.process = window.process || { env: {} };
+      // Robust Polyfill for process.env
+      if (typeof window !== 'undefined') {
+        window.process = window.process || {};
+        window.process.env = window.process.env || {};
+      }
     </script>
   <script type="importmap">
 {
