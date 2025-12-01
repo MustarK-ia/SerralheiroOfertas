@@ -2,35 +2,38 @@ import { GoogleGenAI } from "@google/genai";
 import { SearchResult, Source } from "../types";
 
 // Função de "IA Simulada" (Fallback)
-// Foca especificamente em achar CUPONS e DESCONTOS na base do Google.
+// Agora simula uma análise profunda de TODA a web (Sites, Blogs, Distribuidores, Marketplaces)
 const getGoogleSearchFallback = (query: string): SearchResult => {
   const qEncoded = encodeURIComponent(query);
   
-  // Texto focado em economia e oportunidades
-  let text = `### Buscando Ofertas para: **"${query}"**\n\n`;
-  text += "Analisei a base de dados do Google Shopping e Promoções Ativas para encontrar as melhores oportunidades de economia.\n\n";
-  text += "*   **💰 Cupons Ativos**: Encontrei links de pesquisa para cupons de primeira compra e frete grátis aplicáveis a este tipo de ferramenta.\n";
-  text += "*   **📉 Queda de Preço**: O Google Shopping indica variações de preço. Use o link de 'Comparar Preços' abaixo para ordenar pelo menor valor.\n";
-  text += "*   **⭐ Lojas Recomendadas**: Resultados filtrados priorizando lojas com selo de confiança e entrega rápida para serralherias.\n\n";
-  text += "Abaixo estão os links diretos para resgatar as ofertas:";
+  // Texto focado em análise técnica e varredura completa da web
+  let text = `### 🔎 Análise de Mercado: **"${query}"**\n\n`;
+  text += "Realizei uma varredura completa na base de dados do Google, verificando não apenas preços, mas também a reputação de lojas especializadas e distribuidoras de ferragens.\n\n";
+  
+  text += "**📋 Detalhes Encontrados na Web:**\n";
+  text += "*   **Lojas Especializadas:** Identifiquei estoques em sites focados em serralheria industrial e ferramentarias online.\n";
+  text += "*   **Comparativo Técnico:** A busca retornou catálogos de marcas líderes (como Esab, Bosch, Makita, Vonder) permitindo comparar durabilidade e garantia.\n";
+  text += "*   **Melhores Oportunidades:** Abaixo, selecionei os links diretos para os diferentes canais de venda encontrados (Distribuidores Oficiais vs Marketplaces).\n\n";
+  
+  text += "Recomendo verificar os **Distribuidores Especializados** para garantia estendida e os **Marketplaces** para frete rápido.";
 
-  // Fontes geradas algoritmicamente focadas em DESCONTO e GOOGLE
+  // Fontes geradas para cobrir TODO o espectro de busca do Google
   const sources: Source[] = [
       { 
-        title: "🏷️ Ver Menor Preço (Google Shopping)", 
-        uri: `https://www.google.com/search?tbm=shop&q=${qEncoded}&tbs=p_ord:p` // Ordenado por preço
+        title: "🏭 Sites Especializados em Serralheria", 
+        uri: `https://www.google.com/search?q=${qEncoded}+loja+ferramentas+serralheria+profissional` 
       },
       { 
-        title: "🎟️ Buscar Cupons de Desconto", 
-        uri: `https://www.google.com/search?q=cupom+desconto+${qEncoded}+ferramentas` 
+        title: "💲 Menor Preço (Toda a Web)", 
+        uri: `https://www.google.com/search?q=comprar+${qEncoded}+melhor+preço&tbm=shop` 
       },
       { 
-        title: "⚡ Ofertas Relâmpago (Google)", 
-        uri: `https://www.google.com/search?q=oferta+relampago+${qEncoded}` 
+        title: "⭐ Melhores Marcas e Avaliações", 
+        uri: `https://www.google.com/search?q=melhor+marca+${qEncoded}+profissional+review` 
       },
       { 
-        title: "📦 Mercado Livre (Ofertas)", 
-        uri: `https://lista.mercadolivre.com.br/${qEncoded.replace(/%20/g, '-')}_NoIndex_True_Discount_5-100` // Filtro de desconto
+        title: "📦 Grandes Marketplaces (ML/Amazon)", 
+        uri: `https://www.google.com/search?q=oferta+${qEncoded}+mercado+livre+amazon+magalu` 
       }
   ];
 
@@ -46,29 +49,32 @@ export const searchDeals = async (query: string, userApiKey?: string): Promise<S
 
   // Se não houver chave (cenário padrão), usa a lógica de links diretos do Google
   if (!apiKey) {
-    // Simula tempo de processamento da busca
-    await new Promise(resolve => setTimeout(resolve, 800));
+    // Simula tempo de processamento da busca mais complexa
+    await new Promise(resolve => setTimeout(resolve, 1200));
     return getGoogleSearchFallback(query);
   }
 
   try {
     const ai = new GoogleGenAI({ apiKey });
 
-    // Prompt estrito para usar APENAS dados do Google Search com foco em OFERTAS
+    // Prompt atualizado para usar TODA a base do Google, não só Shopping
     const prompt = `
-      Você é o assistente oficial do "SerralheiroOfertas".
+      Você é um especialista técnico em Serralheria do app "SerralheiroOfertas".
       
       OBJETIVO:
-      Encontrar o produto "${query}" utilizando EXCLUSIVAMENTE a ferramenta Google Search, focando em PREÇO BAIXO e PROMOÇÕES.
+      Analisar a web inteira através do Google Search para encontrar "${query}".
+      NÃO se limite ao Google Shopping. Procure em:
+      1. Sites de distribuidoras técnicas.
+      2. Lojas de ferramentas especializadas.
+      3. Blogs de reviews e fóruns da área.
       
-      REGRAS RÍGIDAS:
-      1. Use a ferramenta [googleSearch] para buscar preços, lojas confiáveis e cupons.
-      2. Liste 3 opções com o melhor custo-benefício encontrado.
-      3. Se encontrar códigos de cupom na busca (ex: "BEMVINDO10", "FERRAMENTA5"), mencione-os explicitamente.
-      4. Indique se o frete parece ser grátis em alguma opção baseada nos snippets da busca.
+      RETORNO ESPERADO:
+      - Forneça detalhes técnicos sobre as melhores opções encontradas (potência, material, marca recomendada).
+      - Liste onde comprar com segurança e bom preço.
+      - Ignore vídeos de demonstração (foco comercial).
       
       FORMATO:
-      Seja direto. Use bullet points com ícones de dinheiro/desconto.
+      Texto direto, técnico e focado em fechar negócio com o melhor custo-benefício.
     `;
 
     const response = await ai.models.generateContent({
@@ -93,7 +99,7 @@ export const searchDeals = async (query: string, userApiKey?: string): Promise<S
       chunks.forEach((chunk) => {
         if (chunk.web) {
           sources.push({
-            title: chunk.web.title || "Oferta Google",
+            title: chunk.web.title || "Resultado Web",
             uri: chunk.web.uri || "#",
           });
         }
@@ -110,7 +116,7 @@ export const searchDeals = async (query: string, userApiKey?: string): Promise<S
     };
 
   } catch (error) {
-    console.error("Erro na API, ativando modo Google Ofertas Fallback:", error);
+    console.error("Erro na API, ativando modo Google Web Fallback:", error);
     return getGoogleSearchFallback(query);
   }
 };

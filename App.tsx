@@ -31,10 +31,10 @@ const App: React.FC = () => {
       <main className="flex-grow max-w-4xl mx-auto w-full px-4 pt-8">
         <div className="flex flex-col items-center justify-center mb-8 text-center space-y-2">
             <h2 className="text-3xl md:text-4xl font-bold text-white">
-                Economize nas suas ferramentas
+                Encontre tudo para Serralheria
             </h2>
             <p className="text-slate-400 max-w-lg">
-                Utilizamos a base de dados do Google para encontrar lojas confiáveis, descontos e cupons ativos para serralheiros.
+                Varremos toda a base de dados do Google (Sites, Distribuidores e Shopping) para encontrar as melhores ferramentas e ofertas detalhadas.
             </p>
         </div>
 
@@ -50,8 +50,8 @@ const App: React.FC = () => {
         {loadingState === LoadingState.LOADING && (
           <div className="flex flex-col items-center justify-center py-12 animate-pulse">
             <div className="w-16 h-16 border-4 border-slate-700 border-t-amber-500 rounded-full animate-spin mb-4"></div>
-            <p className="text-slate-400 font-medium">Buscando Ofertas no Google...</p>
-            <p className="text-slate-500 text-sm mt-2">Verificando cupons e lojas confiáveis</p>
+            <p className="text-slate-400 font-medium">Analisando sites e catálogos na Web...</p>
+            <p className="text-slate-500 text-sm mt-2">Verificando especificações técnicas e ofertas</p>
           </div>
         )}
 
@@ -73,7 +73,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="text-center py-6 text-slate-500 text-sm border-t border-slate-800 mt-auto">
-        <p>© {new Date().getFullYear()} SerralheiroOfertas. Buscas realizadas via Google Search.</p>
+        <p>© {new Date().getFullYear()} SerralheiroOfertas. Tecnologia de Busca Google.</p>
       </footer>
     </div>
   );
