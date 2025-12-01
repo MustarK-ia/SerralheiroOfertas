@@ -15,12 +15,10 @@ const App: React.FC = () => {
     setResult(null);
 
     try {
-      // O serviço agora trata erros internamente e retorna um fallback se necessário
       const data = await searchDeals(query);
       setResult(data);
       setLoadingState(LoadingState.SUCCESS);
     } catch (error) {
-      // Este bloco raramente será alcançado devido ao tratamento no service
       console.error(error);
       setLoadingState(LoadingState.ERROR);
     }
@@ -33,10 +31,10 @@ const App: React.FC = () => {
       <main className="flex-grow max-w-4xl mx-auto w-full px-4 pt-8">
         <div className="flex flex-col items-center justify-center mb-8 text-center space-y-2">
             <h2 className="text-3xl md:text-4xl font-bold text-white">
-                Encontre o melhor preço
+                Economize nas suas ferramentas
             </h2>
             <p className="text-slate-400 max-w-lg">
-                Pesquisamos em centenas de sites confiáveis para achar ferramentas, insumos e ofertas exclusivas para sua serralheria.
+                Utilizamos a base de dados do Google para encontrar lojas confiáveis, descontos e cupons ativos para serralheiros.
             </p>
         </div>
 
@@ -52,8 +50,8 @@ const App: React.FC = () => {
         {loadingState === LoadingState.LOADING && (
           <div className="flex flex-col items-center justify-center py-12 animate-pulse">
             <div className="w-16 h-16 border-4 border-slate-700 border-t-amber-500 rounded-full animate-spin mb-4"></div>
-            <p className="text-slate-400 font-medium">Analisando o mercado...</p>
-            <p className="text-slate-500 text-sm mt-2">Buscando descontos e lojas confiáveis</p>
+            <p className="text-slate-400 font-medium">Buscando Ofertas no Google...</p>
+            <p className="text-slate-500 text-sm mt-2">Verificando cupons e lojas confiáveis</p>
           </div>
         )}
 
@@ -75,7 +73,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="text-center py-6 text-slate-500 text-sm border-t border-slate-800 mt-auto">
-        <p>© {new Date().getFullYear()} SerralheiroOfertas AI. Resultados baseados em pesquisa.</p>
+        <p>© {new Date().getFullYear()} SerralheiroOfertas. Buscas realizadas via Google Search.</p>
       </footer>
     </div>
   );
